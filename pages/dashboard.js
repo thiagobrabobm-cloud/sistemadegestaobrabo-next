@@ -1,32 +1,34 @@
-// pages/dashboard.js
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function Dashboard({ user }) {
   return (
-    <main style={{ maxWidth: 960, margin: "3rem auto", textAlign: "center" }}>
+    <div style={{ textAlign: "center", marginTop: 40 }}>
       <h1>Dashboard</h1>
       <p>Bem-vindo, {user.name} ({user.email})</p>
+
       {user.image && (
-        <img
+        <Image
           src={user.image}
-          alt={user.name}
-          style={{ borderRadius: "50%", width: 96, height: 96, objectFit: "cover" }}
+          alt="Avatar"
+          width={120}
+          height={120}
+          style={{ borderRadius: "50%" }}
         />
       )}
 
-      <div style={{ marginTop: 24 }}>
-        <a href="/api/auth/signout">Sair</a>
+      <div style={{ marginTop: 16 }}>
+        <button onClick={() => signOut()}>Sair</button>
       </div>
-
-      {/* Aqui depois você coloca as telas/funcionalidades do sistema */}
-    </main>
+    </div>
   );
 }
 
-// Protege a página no lado do servidor
 export async function getServerSideProps(ctx) {
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
+
   if (!session) {
     return {
       redirect: {
@@ -35,5 +37,6 @@ export async function getServerSideProps(ctx) {
       },
     };
   }
+
   return { props: { user: session.user } };
 }

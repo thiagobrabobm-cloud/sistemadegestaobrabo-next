@@ -1,31 +1,40 @@
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import Image from "next/image";
 
-export default function LoginPage() {
-  const { data: session } = useSession()
+export default function Home() {
+  const { data: session } = useSession();
 
-  // Se o usuário estiver logado, mostre as informações e o botão de sair
   if (session) {
     return (
-      <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: '50px' }}>
-        <h1>Bem-vindo ao Sistema de Gestão Brabo!</h1>
+      <div style={{ textAlign: "center", marginTop: 40 }}>
+        <h1>Sistema de Gestão Brabo</h1>
         <p>Logado como: {session.user.email}</p>
-        <img src={session.user.image} alt="Foto do usuário" style={{ borderRadius: '50%' }} />
-        <br />
-        <button onClick={() => signOut()} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>
-          Sair (Sign Out)
-        </button>
+
+        {session.user.image && (
+          <Image
+            src={session.user.image}
+            alt="Avatar"
+            width={120}
+            height={120}
+            style={{ borderRadius: "50%" }}
+          />
+        )}
+
+        <div style={{ marginTop: 16 }}>
+          <button onClick={() => signOut()}>Sair (Sign Out)</button>
+          <span style={{ margin: "0 8px" }} />
+          <Link href="/dashboard">Ir para o Dashboard</Link>
+        </div>
       </div>
-    )
+    );
   }
 
-  // Se não estiver logado, mostre o botão de entrar
   return (
-    <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: '50px' }}>
+    <div style={{ textAlign: "center", marginTop: 40 }}>
       <h1>Sistema de Gestão Brabo</h1>
       <p>Você não está logado.</p>
-      <button onClick={() => signIn("google")} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-        Entrar com o Google
-      </button>
+      <button onClick={() => signIn("google")}>Entrar com o Google</button>
     </div>
-  )
+  );
 }

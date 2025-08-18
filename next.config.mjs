@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  images: {
+    domains: ["lh3.googleusercontent.com"],
+  },
+  // Se quiser ignorar o ESLint no build (opcional de emergência):
+  // eslint: { ignoreDuringBuilds: true },
 };
 
 export default nextConfig;
